@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#eef2ef">
+    <title>RLC / Analizador fasorial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="wordmark" href="/" aria-label="RLC, inicio"><span class="wordmark-mark">RLC</span><span class="wordmark-divider"></span><span class="wordmark-caption">LABORATORIO<br>FASORIAL</span></a>
+      <div class="topbar-right">
+        <div class="database-status" id="database-status"><span class="status-dot"></span><span>Comprobando MySQL</span></div>
+        <button class="button button-quiet" id="history-button" type="button" title="Ver cálculos guardados"><span aria-hidden="true">◷</span> Historial</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="builder">
+        <div class="panel-intro">
+          <div class="eyebrow"><span class="eyebrow-line"></span> CONFIGURACIÓN</div>
+          <h1>Arma tu<br><em>circuito.</em></h1>
+          <p>Define la excitación y conecta los elementos de la red.</p>
+        </div>
+
+        <form id="circuit-form">
+          <section class="form-section source-section" aria-labelledby="source-title">
+            <div class="section-heading"><span class="section-index">01</span><h2 id="source-title">Fuente senoidal</h2></div>
+            <label class="field-label" for="circuit-name">Nombre del análisis</label>
+            <input class="text-input" id="circuit-name" name="name" maxlength="120" value="Circuito de prueba">
+            <div class="field-grid field-grid-source">
+              <label class="field-label" for="source-magnitude">Tensión RMS <span>(V)</span>
+                <input class="text-input numeric-input" id="source-magnitude" type="number" min="0" step="any" value="120" required>
+              </label>
+              <label class="field-label" for="source-angle">Ángulo <span>(°)</span>
+                <input class="text-input numeric-input" id="source-angle" type="number" step="any" value="0" required>
+              </label>
+            </div>
+            <label class="field-label frequency-label" for="frequency">Frecuencia <span>(Hz)</span>
+              <input class="text-input numeric-input" id="frequency" type="number" min="0.000001" step="any" value="60" required>
+            </label>
+          </section>
+
+          <section class="form-section circuit-section" aria-labelledby="circuit-title">
+            <div class="section-heading"><span class="section-index">02</span><h2 id="circuit-title">Red de impedancias</h2></div>
+            <p class="section-note">Combina grupos serie y paralelo para definir la topología.</p>
+            <div id="circuit-tree" class="circuit-tree"></div>
+          </section>
+
+          <div class="form-footer">
+            <p class="model-note">Modelo ideal · fasores RMS · frecuencia constante</p>
+            <button class="button button-primary" id="calculate-button" type="submit"><span aria-hidden="true">↗</span> Calcular circuito</button>
+          </div>
+        </form>
+      </aside>
+
+      <section class="results" aria-labelledby="results-title">
+        <div class="results-heading">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> RESULTADOS</div>
+            <h2 id="results-title">Respuesta fasorial</h2>
+          </div>
+          <div class="frequency-readout" id="frequency-readout">ESPERANDO CÁLCULO</div>
+        </div>
+        <div id="results-content" class="results-content">
+          <div class="empty-state">
+            <div class="empty-diagram" aria-hidden="true"><span></span><i></i><span></span><b>V</b></div>
+            <h3>Tu red empieza aquí.</h3>
+            <p>Configura los componentes y calcula para ver impedancias, corrientes y tensiones en ambos formatos.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="history-dialog" id="history-dialog" aria-labelledby="history-title">
+      <div class="dialog-header"><div><div class="eyebrow"><span class="eyebrow-line"></span> MYSQL</div><h2 id="history-title">Análisis guardados</h2></div><button class="icon-button" id="close-history" type="button" aria-label="Cerrar historial">×</button></div>
+      <div id="history-list" class="history-list"></div>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
